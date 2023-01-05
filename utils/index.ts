@@ -1,3 +1,22 @@
+import * as ImagePicker from "expo-image-picker";
+
+export const pickImage = async () => {
+  try {
+    const result = await ImagePicker.launchCameraAsync();
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const askForPermission = async () => {
+  try {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    return status;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const palette = {
   tealGreen: "#128c7e",
   tealGreenDark: "#075e54",

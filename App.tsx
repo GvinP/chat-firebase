@@ -7,13 +7,16 @@ import {
   LogBox,
 } from "react-native";
 import { useAssets } from "expo-asset";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignIn from "./screens/SignIn";
 import ContextWrapper from "./context/ContextWrapper";
+import Context from "./context/Context";
+import Profile from "./screens/Profile";
+import Home from "./screens/Home";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -23,6 +26,9 @@ LogBox.ignoreLogs([
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const {
+    theme: { colors },
+  } = useContext(Context);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -50,7 +56,25 @@ function App() {
           <Stack.Screen name="signIn" component={SignIn} />
         </Stack.Navigator>
       ) : (
-        <Text>{JSON.stringify(currentUser, null, 2)}</Text>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: colors.foreground },
+            headerTintColor: colors.white,
+          }}
+        >
+          {!currentUser.displayName && (
+            <Stack.Screen
+              name="profile"
+              component={Profile}
+              options={{ headerShown: false }}
+            />
+          )}
+          <Stack.Screen
+            name="home"
+            component={Home}
+            options={{ title: "Whatsapp" }}
+          />
+        </Stack.Navigator>
       )}
     </NavigationContainer>
   );

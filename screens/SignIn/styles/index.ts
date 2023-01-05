@@ -11,24 +11,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginTop: 150,
     marginBottom: 20,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   image: {
     width: 180,
     height: 180,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   input: {
     borderBottomWidth: 2,
     width: 200,
-    alignSelf: "center"
+    alignSelf: "center",
+    paddingBottom: 10,
   },
   button: {
     width: 200,
     height: 40,
     alignItems: "center",
     justifyContent: "center",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   buttonText: {
     fontSize: 18,
