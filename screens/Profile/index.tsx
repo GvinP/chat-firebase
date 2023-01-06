@@ -5,7 +5,8 @@ import {
   Image,
   TextInput,
   Pressable,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useState, useEffect } from "react";
@@ -13,8 +14,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Context from "../../context/Context";
 import styles from "./styles";
-import { askForPermission, pickImage } from "../../utils";
+import { askForPermission, pickImage, uploadImage } from "../../utils";
 import { PermissionStatus } from "expo-image-picker";
+import { auth, db } from "../../firebase";
+import { updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const Profile = () => {
   const {
@@ -22,7 +26,8 @@ const Profile = () => {
   } = useContext(Context);
   const [displayName, setDisplayName] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [permissionStatus, setPermissionStatus] = useState<PermissionStatus | null>(null);
+  const [permissionStatus, setPermissionStatus] =
+    useState<PermissionStatus | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -33,19 +38,54 @@ const Profile = () => {
     })();
   }, []);
 
-  const handlePress = async () => {
+  const handleProfileImage = async () => {
     const result = await pickImage();
     if (!result?.canceled) {
       setSelectedImage(result?.assets?.[0].uri || "");
     }
   };
 
-  if(!permissionStatus) {
+  const handlePress = async () => {
+    const user = auth.currentUser;
+    let photoURL;
+    if (selectedImage) {
+      const response = await uploadImage(
+        selectedImage,
+        `images/${user?.uid}`,
+        "profilePicture"
+      );
+      if (response) {
+        const { url, fileName } = response;
+        photoURL = url;
+      }
+    }
+    const userData = {
+      displayName,
+      email: user?.email,
+      photoURL: "",
+    };
+    if (photoURL) {
+      userData.photoURL = photoURL;
+    }
+    if (user) {
+      try {
+        console.log({ user });
+        await Promise.all([
+          updateProfile(user, userData),
+          setDoc(doc(db, "users", user.uid), { ...userData, uid: user.uid }),
+        ]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  if (!permissionStatus) {
     return (
-        <View style={{flex:1, alignItems: "center", justifyContent: "center"}}>
-            <ActivityIndicator size="large"/>
-        </View>
-    )
+      <View style={styles.centeredContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   return (
@@ -61,7 +101,7 @@ const Profile = () => {
       </Text>
       <TouchableOpacity
         style={[styles.photoContainer, { backgroundColor: colors.background }]}
-        onPress={handlePress}
+        onPress={handleProfileImage}
       >
         {!selectedImage ? (
           <MaterialCommunityIcons

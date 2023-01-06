@@ -62,7 +62,7 @@ function App() {
             headerTintColor: colors.white,
           }}
         >
-          {!currentUser.displayName && (
+          {currentUser.displayName && (
             <Stack.Screen
               name="profile"
               component={Profile}
