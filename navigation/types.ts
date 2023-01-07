@@ -1,8 +1,13 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation, NavigatorScreenParams } from "@react-navigation/native";
 
 export type RootParamList = {
-  home: undefined;
+  home: NavigatorScreenParams<TabParamList>;
   profile: undefined;
+};
+
+export type TabParamList = {
+  photo: undefined;
+  chats: undefined;
 };
 
 type UseNavigationType = NavigationProp<RootParamList>;
