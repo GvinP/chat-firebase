@@ -12,6 +12,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import SignIn from "./screens/SignIn";
 import ContextWrapper from "./context/ContextWrapper";
 import Context from "./context/Context";
@@ -62,7 +63,7 @@ function App() {
             headerTintColor: colors.white,
           }}
         >
-          {currentUser.displayName && (
+          {!currentUser.displayName && (
             <Stack.Screen
               name="profile"
               component={Profile}

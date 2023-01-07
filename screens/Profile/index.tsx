@@ -6,7 +6,6 @@ import {
   TextInput,
   Pressable,
   ActivityIndicator,
-  ScrollView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useState, useEffect } from "react";
@@ -19,6 +18,7 @@ import { PermissionStatus } from "expo-image-picker";
 import { auth, db } from "../../firebase";
 import { updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { useAppNavigation } from "../../navigation/types";
 
 const Profile = () => {
   const {
@@ -28,6 +28,7 @@ const Profile = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [permissionStatus, setPermissionStatus] =
     useState<PermissionStatus | null>(null);
+  const navigation = useAppNavigation();
 
   useEffect(() => {
     (async () => {
@@ -69,11 +70,11 @@ const Profile = () => {
     }
     if (user) {
       try {
-        console.log({ user });
         await Promise.all([
           updateProfile(user, userData),
           setDoc(doc(db, "users", user.uid), { ...userData, uid: user.uid }),
         ]);
+        navigation.navigate("home");
       } catch (error) {
         console.log(error);
       }
