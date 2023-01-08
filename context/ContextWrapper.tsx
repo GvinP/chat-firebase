@@ -7,7 +7,7 @@ export default function ContextWrapper({
 }: {
   children: React.ReactNode;
 }) {
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState<any[]>([]);
   const [unfilteredRooms, setUnfilteredRooms] = useState([]);
-  return <Context.Provider value={{ theme }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ theme, rooms, setRooms }}>{children}</Context.Provider>;
 }

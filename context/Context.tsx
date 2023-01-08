@@ -3,6 +3,8 @@ import { theme } from "../utils";
 
 const GlobalContext = React.createContext({
   theme,
+  rooms: [] as any[],
+  setRooms: (value: any[]) => {},
 });
 
 export default GlobalContext;
