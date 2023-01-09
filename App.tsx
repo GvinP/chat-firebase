@@ -18,16 +18,17 @@ import ContextWrapper from "./context/ContextWrapper";
 import Context from "./context/Context";
 import Profile from "./screens/Profile";
 import Photo from "./screens/Photo";
-import { TabParamList } from "./navigation/types";
+import { RootParamList, TabParamList } from "./navigation/types";
 import Chats from "./screens/Chats";
 import { Ionicons } from "@expo/vector-icons";
+import Contacts from "./screens/Contacts";
 
 LogBox.ignoreLogs([
   "Setting a timer",
   "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
 ]);
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootParamList>();
 const Tab = createMaterialTopTabNavigator<TabParamList>();
 
 function App() {
@@ -78,6 +79,14 @@ function App() {
             name="home"
             component={Home}
             options={{ title: "Whatsapp" }}
+          />
+          <Stack.Screen
+            name="contacts"
+            component={Contacts}
+            options={{
+              title: "Select contacts",
+              headerBackTitleVisible: false,
+            }}
           />
         </Stack.Navigator>
       )}
