@@ -8,6 +8,11 @@ export type RootParamList = {
   home: NavigatorScreenParams<TabParamList>;
   profile: undefined;
   contacts: undefined;
+  chat: {
+    room: string;
+    user: string;
+    image: string;
+  };
   signIn: undefined;
 };
 
