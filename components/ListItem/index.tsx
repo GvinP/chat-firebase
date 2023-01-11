@@ -3,12 +3,14 @@ import React, { useContext } from "react";
 import Context from "../../context/Context";
 import styles from "./styles";
 import { useAppNavigation } from "../../navigation/types";
-import {Grid} from "react-native-easy-grid"
+import { Grid, Col, Row } from "react-native-easy-grid";
+import Avatar from "../Avatar";
+import { User } from "../../utils";
 
 interface ListItemProps {
   type: string;
   description: string;
-  user: string;
+  user: User;
   style: ViewStyle;
   time: string;
   room: string;
@@ -33,8 +35,20 @@ const ListItem: React.FC<ListItemProps> = ({
       style={{ height: 80, ...style }}
       onPress={() => navigation.navigate("chat", { user, room, image })}
     >
-      <Grid style={{maxHeight: 80}}>
-
+      <Grid style={{ maxHeight: 80 }}>
+        <Col
+          style={{ width: 80, alignItems: "center", justifyContent: "center" }}
+        >
+          <Avatar user={user} size={type === "contacts" ? 40 : 65} />
+        </Col>
+        <Col style={{ marginLeft: 10 }}>
+          <Row style={{ alignItems: "center" }}>
+            <Col>
+              <Text>{user.displayName}</Text>
+            </Col>
+            <Col></Col>
+          </Row>
+        </Col>
       </Grid>
     </TouchableOpacity>
   );

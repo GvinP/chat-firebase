@@ -3,6 +3,7 @@ import {
   useNavigation,
   NavigatorScreenParams,
 } from "@react-navigation/native";
+import { User } from "../utils";
 
 export type RootParamList = {
   home: NavigatorScreenParams<TabParamList>;
@@ -10,7 +11,7 @@ export type RootParamList = {
   contacts: undefined;
   chat: {
     room: string;
-    user: string;
+    user: User;
     image: string;
   };
   signIn: undefined;

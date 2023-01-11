@@ -74,7 +74,7 @@ const Profile = () => {
           updateProfile(user, userData),
           setDoc(doc(db, "users", user.uid), { ...userData, uid: user.uid }),
         ]);
-        navigation.navigate("home");
+        navigation.navigate("home", { screen: "chats" });
       } catch (error) {
         console.log(error);
       }

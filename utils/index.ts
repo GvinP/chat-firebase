@@ -4,6 +4,12 @@ import { nanoid } from "nanoid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
 
+export interface User {
+  displayName: string;
+  email: string;
+  photoURL?: string;
+}
+
 export const pickImage = async () => {
   try {
     const result = await ImagePicker.launchCameraAsync();

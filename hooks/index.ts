@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import * as Contacts from "expo-contacts";
-
-interface Contact {
-  contactName: string;
-  email: string;
-}
+import { User } from "../utils";
 
 export const useContacts = () => {
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<User[]>([]);
   useEffect(() => {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
@@ -23,7 +19,7 @@ export const useContacts = () => {
                   c.firstName && c.emails && c.emails[0] && c.emails[0].email
               )
               .map((c) => ({
-                contactName:
+                displayName:
                   c.firstName && c.lastName
                     ? `${c.firstName} ${c.lastName}`
                     : `${c.firstName}`,
