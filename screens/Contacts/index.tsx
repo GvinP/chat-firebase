@@ -6,9 +6,13 @@ import ListItem from "../../components/ListItem";
 import Context from "../../context/Context";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
+import { useRoute } from "@react-navigation/native";
+import { RootRouteProps } from "../../navigation/types";
 
 const Contacts = () => {
   const contacts = useContacts();
+  const route = useRoute<RootRouteProps<"contacts">>();
+  const image = route.params && route.params.image;
   return (
     <FlatList
       data={contacts}
@@ -50,8 +54,6 @@ const ContactPreview: React.FC<ContactPreviewProps> = ({ contact, image }) => {
       room={rooms.find((room) =>
         room.participantsArray.includes(contact.email)
       )}
-      description={""}
-      time={""}
     />
   );
 };

@@ -10,7 +10,7 @@ interface AvatarProps {
 const Avatar: React.FC<AvatarProps> = ({ size, user }) => {
   return (
     <Image
-      style={{ width: size, aspectRatio: 1, borderRadius: size / 2 }}
+      style={{ width: size, height: size, borderRadius: size / 2 }}
       source={
         user.photoURL
           ? { uri: user.photoURL }

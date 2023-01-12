@@ -9,12 +9,14 @@ import { User } from "../../utils";
 
 interface ListItemProps {
   type: string;
-  description: string;
-  user: User;
-  style: ViewStyle;
-  time: string;
   room: string;
   image: string;
+  user: User;
+  style?: ViewStyle;
+  description?: string;
+  time?: {
+    seconds: number;
+  };
 }
 
 const ListItem: React.FC<ListItemProps> = ({
@@ -44,10 +46,27 @@ const ListItem: React.FC<ListItemProps> = ({
         <Col style={{ marginLeft: 10 }}>
           <Row style={{ alignItems: "center" }}>
             <Col>
-              <Text>{user.displayName}</Text>
+              <Text
+                style={{ fontSize: 16, fontWeight: "600", color: colors.text }}
+              >
+                {user.displayName}
+              </Text>
             </Col>
-            <Col></Col>
+            {time && (
+              <Col style={{ alignItems: "flex-end" }}>
+                <Text style={{ fontSize: 11, color: colors.secondaryText }}>
+                  {new Date(time.seconds * 1000).toLocaleDateString()}
+                </Text>
+              </Col>
+            )}
           </Row>
+          {description && (
+            <Row style={{ marginTop: -5 }}>
+              <Text style={{ fontSize: 13, color: colors.secondaryText }}>
+                {description}
+              </Text>
+            </Row>
+          )}
         </Col>
       </Grid>
     </TouchableOpacity>
