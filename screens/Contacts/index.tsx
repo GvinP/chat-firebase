@@ -40,7 +40,7 @@ const ContactPreview: React.FC<ContactPreviewProps> = ({ contact, image }) => {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       if (snapshot.docs.length) {
         const userDoc = snapshot.docs[0].data();
-        setUser((prevUser: any) => ({ ...prevUser, userDoc }));
+        setUser((prevUser: any) => ({ ...prevUser, ...userDoc }));
       }
     });
     return () => unsubscribe();

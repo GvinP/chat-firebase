@@ -11,9 +11,9 @@ export type RootParamList = {
   profile: undefined;
   contacts: { image: string };
   chat: {
-    room: string;
     user: User;
     image: string;
+    room?: string;
   };
   signIn: undefined;
 };
