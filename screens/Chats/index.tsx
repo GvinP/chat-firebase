@@ -33,9 +33,14 @@ const Chats = () => {
     return () => usubscribe();
   }, []);
   const getUserB = (user: User, contacts: User[]) => {
-    return (
-      contacts.find((contact) => contact.email === user.email) || ({} as User)
+    const userContact = contacts.find(
+      (contact) => contact.email === user.email
     );
+    if (userContact && userContact.displayName) {
+      return { ...user, displayName: userContact.displayName };
+    } else {
+      return user;
+    }
   };
   return (
     <View style={styles.container}>

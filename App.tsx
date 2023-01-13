@@ -22,6 +22,8 @@ import { RootParamList, TabParamList } from "./navigation/types";
 import Chats from "./screens/Chats";
 import { Ionicons } from "@expo/vector-icons";
 import Contacts from "./screens/Contacts";
+import ChatHeader from "./components/ChatHeader";
+import Chat from "./screens/Chat";
 
 LogBox.ignoreLogs([
   "Setting a timer",
@@ -79,6 +81,14 @@ function App() {
             name="home"
             component={Home}
             options={{ title: "Whatsapp" }}
+          />
+          <Stack.Screen
+            name="chat"
+            component={Chat}
+            options={{
+              headerTitle: (props) => <ChatHeader {...props} />,
+              headerBackTitleVisible: false,
+            }}
           />
           <Stack.Screen
             name="contacts"
