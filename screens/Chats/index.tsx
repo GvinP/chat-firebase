@@ -1,7 +1,13 @@
 import { View, Text } from "react-native";
 import React, { useContext, useEffect } from "react";
 import styles from "./styles";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  DocumentData,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import Context from "../../context/Context";
 import ContactsFloatingIcon from "../../components/ContactsFloatingIcon";
@@ -11,7 +17,7 @@ import { useContacts } from "../../hooks";
 
 const Chats = () => {
   const { currentUser } = auth;
-  const { rooms, setRooms } = useContext(Context);
+  const { rooms, setRooms, setUnfilteredRooms } = useContext(Context);
   const contacts = useContacts();
   const chatsQuery = query(
     collection(db, "rooms"),
@@ -19,16 +25,15 @@ const Chats = () => {
   );
   useEffect(() => {
     const usubscribe = onSnapshot(chatsQuery, (querySnapshot) => {
-      const parsedChats = querySnapshot.docs
-        .filter((doc) => doc.data().lastMessage)
-        .map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-          userB: doc
-            .data()
-            .participants.find((p: any) => p.email !== currentUser?.email),
-        }));
-      setRooms(parsedChats);
+      const parsedChats: DocumentData[] = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+        userB: doc
+          .data()
+          .participants.find((p: any) => p.email !== currentUser?.email),
+      }));
+      setUnfilteredRooms(parsedChats);
+      setRooms(parsedChats.filter((doc) => doc.lastMessage));
     });
     return () => usubscribe();
   }, []);

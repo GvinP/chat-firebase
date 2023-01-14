@@ -7,7 +7,14 @@ import { RootRouteProps } from "../../navigation/types";
 import "react-native-get-random-values";
 import { nanoid } from "nanoid";
 import Context from "../../context/Context";
-import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { User } from "../../utils";
 import { GiftedChat, User as UserChat } from "react-native-gifted-chat";
 
@@ -80,7 +87,12 @@ const Chat = () => {
     [messages]
   );
 
-  const onSend = (messages: any[]) => {};
+  const onSend = async (messages: any[]) => {
+    const writes: any[] = messages.map((m) => addDoc(roomMessagesRef, m));
+    const lastMessage = messages[messages.length - 1];
+    writes.push(updateDoc(roomRef, { lastMessage }));
+    await Promise.all(writes);
+  };
 
   return (
     <ImageBackground
@@ -88,11 +100,7 @@ const Chat = () => {
       resizeMode="cover"
       style={styles.backgroundImage}
     >
-      <GiftedChat
-        messages={messages}
-        user={senderUser}
-        onSend={(messages) => onSend(messages)}
-      />
+      <GiftedChat messages={messages} user={senderUser} onSend={onSend} />
     </ImageBackground>
   );
 };

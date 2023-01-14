@@ -44,7 +44,6 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoading(false);
       if (user) {
-        console.log({ user });
         setCurrentUser(user);
       }
     });

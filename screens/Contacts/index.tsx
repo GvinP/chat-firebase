@@ -30,7 +30,7 @@ interface ContactPreviewProps {
 }
 
 const ContactPreview: React.FC<ContactPreviewProps> = ({ contact, image }) => {
-  const { rooms } = useContext(Context);
+  const { unfilteredRooms } = useContext(Context);
   const [user, setUser] = useState<any>(contact);
   useEffect(() => {
     const q = query(
@@ -51,7 +51,7 @@ const ContactPreview: React.FC<ContactPreviewProps> = ({ contact, image }) => {
       type="contacts"
       user={user}
       image={image}
-      room={rooms.find((room) =>
+      room={unfilteredRooms.find((room) =>
         room.participantsArray.includes(contact.email)
       )}
     />
