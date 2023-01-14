@@ -13,7 +13,7 @@ export type RootParamList = {
   chat: {
     user: User;
     image: string;
-    room?: string;
+    room?: any;
   };
   signIn: undefined;
 };
