@@ -1,5 +1,5 @@
 // @refresh reset
-import { StyleSheet, Text, View, ImageBackground } from "react-native";
+import { ImageBackground } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
 import { useRoute } from "@react-navigation/native";
@@ -16,7 +16,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { User } from "../../utils";
-import { GiftedChat, User as UserChat } from "react-native-gifted-chat";
+import {
+  GiftedChat,
+  User as UserChat,
+  Actions,
+} from "react-native-gifted-chat";
+import { Ionicons } from "@expo/vector-icons";
+import styles from "./styles";
 
 const randomId = nanoid();
 
@@ -100,15 +106,26 @@ const Chat = () => {
       resizeMode="cover"
       style={styles.backgroundImage}
     >
-      <GiftedChat messages={messages} user={senderUser} onSend={onSend} />
+      <GiftedChat
+        messages={messages.sort((a, b) => {
+          return (
+            new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf()
+          );
+        })}
+        user={senderUser}
+        onSend={onSend}
+        renderActions={(props) => (
+          <Actions
+            {...props}
+            containerStyle={styles.actions}
+            icon={() => (
+              <Ionicons name="camera" size={30} color={colors.iconGray} />
+            )}
+          />
+        )}
+      />
     </ImageBackground>
   );
 };
 
 export default Chat;
-
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-  },
-});
