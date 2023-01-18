@@ -107,7 +107,11 @@ const Chat = () => {
       style={styles.backgroundImage}
     >
       <GiftedChat
-        messages={messages}
+        messages={messages.sort((a, b) => {
+          return (
+            new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf()
+          );
+        })}
         user={senderUser}
         onSend={onSend}
         renderActions={(props) => (
