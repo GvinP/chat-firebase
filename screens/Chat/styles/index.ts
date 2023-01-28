@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     right: 50,
     alignItems: "center",
     justifyContent: "center",
+    zIndex: 1000
   },
 });
 

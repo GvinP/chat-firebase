@@ -15,7 +15,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { User } from "../../utils";
+import { User, pickImage, uploadImage } from "../../utils";
 import {
   GiftedChat,
   User as UserChat,
@@ -102,7 +102,27 @@ const Chat = () => {
     await Promise.all(writes);
   };
 
-  const handlePhotoPicker = async () => {};
+  const sendImage = async (uri: string, roomPath?: string) => {
+    const response = await uploadImage(uri, `images/rooms/${roomPath||roomHash}`, "");
+    if (response) {
+      const message = {
+        _id: response.fileName,
+        text: "",
+        createdAt: new Date(),
+        user: senderUser,
+        image: response.url,
+      }
+      const lastMessage = {...message, text: "Image"}
+      await Promise.all([addDoc(roomMessagesRef, message), updateDoc(roomRef, {lastMessage})])
+    }
+  };
+
+  const handlePhotoPicker = async () => {
+    const result = await pickImage();
+    if (!result?.canceled && result?.assets[0].uri) {
+      await sendImage(result?.assets[0].uri);
+    }
+  };
 
   return (
     <ImageBackground
@@ -129,7 +149,6 @@ const Chat = () => {
           />
         )}
         timeTextStyle={{ right: { color: colors.iconGray } }}
-        // renderMessage={()=> <View style={{backgroundColor: "teal", width: 100, height: 30}}/>}
         renderSend={(props) => {
           const { text, onSend } = props;
           return (
