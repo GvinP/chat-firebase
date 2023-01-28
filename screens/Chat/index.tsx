@@ -1,5 +1,5 @@
 // @refresh reset
-import { ImageBackground } from "react-native";
+import { ImageBackground, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
 import { useRoute } from "@react-navigation/native";
@@ -20,6 +20,8 @@ import {
   GiftedChat,
   User as UserChat,
   Actions,
+  InputToolbar,
+  Bubble,
 } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./styles";
@@ -100,6 +102,8 @@ const Chat = () => {
     await Promise.all(writes);
   };
 
+  const handlePhotoPicker = async () => {};
+
   return (
     <ImageBackground
       source={require("../../assets/chatbg.png")}
@@ -118,9 +122,61 @@ const Chat = () => {
           <Actions
             {...props}
             containerStyle={styles.actions}
+            onPressActionButton={handlePhotoPicker}
             icon={() => (
               <Ionicons name="camera" size={30} color={colors.iconGray} />
             )}
+          />
+        )}
+        timeTextStyle={{ right: { color: colors.iconGray } }}
+        // renderMessage={()=> <View style={{backgroundColor: "teal", width: 100, height: 30}}/>}
+        renderSend={(props) => {
+          const { text, onSend } = props;
+          return (
+            <TouchableOpacity
+              style={{
+                width: 40,
+                aspectRatio: 1,
+                borderRadius: 20,
+                backgroundColor: colors.primary,
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 5,
+              }}
+              onPress={() => {
+                if (text && onSend) {
+                  onSend(
+                    {
+                      text: text.trim(),
+                    },
+                    true
+                  );
+                }
+              }}
+            >
+              <Ionicons name="send" size={20} color={colors.white} />
+            </TouchableOpacity>
+          );
+        }}
+        renderInputToolbar={(props) => (
+          <InputToolbar
+            {...props}
+            containerStyle={{
+              marginHorizontal: 10,
+              marginBottom: 2,
+              borderRadius: 20,
+              paddingTop: 5,
+            }}
+          />
+        )}
+        renderBubble={(props) => (
+          <Bubble
+            {...props}
+            textStyle={{ right: { color: colors.text } }}
+            wrapperStyle={{
+              left: { backgroundColor: colors.white },
+              right: { backgroundColor: colors.tertiary },
+            }}
           />
         )}
       />
