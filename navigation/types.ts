@@ -4,12 +4,13 @@ import {
   NavigatorScreenParams,
   RouteProp,
 } from "@react-navigation/native";
+import { ImagePickerResult } from "expo-image-picker";
 import { User } from "../utils";
 
 export type RootParamList = {
   home: NavigatorScreenParams<TabParamList>;
   profile: undefined;
-  contacts: { image: string };
+  contacts: { image: ImagePickerResult };
   chat: {
     user: User;
     image: string;
