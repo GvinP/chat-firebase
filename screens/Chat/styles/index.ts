@@ -11,7 +11,18 @@ const styles = StyleSheet.create({
     right: 50,
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 1000
+    zIndex: 1000,
+  },
+  imageContainer: {
+    borderRadius: 15,
+    padding: 2,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    padding: 6,
+    borderRadius: 15,
+    resizeMode: "cover"
   },
 });
 

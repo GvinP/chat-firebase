@@ -1,5 +1,5 @@
 // @refresh reset
-import { ImageBackground, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { auth, db } from "../../firebase";
 import { useRoute } from "@react-navigation/native";
@@ -24,6 +24,7 @@ import {
   Bubble,
 } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
+import ImageView from "react-native-image-viewing";
 import styles from "./styles";
 
 const randomId = nanoid();
@@ -31,6 +32,8 @@ const randomId = nanoid();
 const Chat = () => {
   const [roomHash, setRoomHash] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImageView, setSelectedImageView] = useState("");
   const {
     theme: { colors },
   } = useContext(Context);
@@ -103,7 +106,11 @@ const Chat = () => {
   };
 
   const sendImage = async (uri: string, roomPath?: string) => {
-    const response = await uploadImage(uri, `images/rooms/${roomPath||roomHash}`, "");
+    const response = await uploadImage(
+      uri,
+      `images/rooms/${roomPath || roomHash}`,
+      ""
+    );
     if (response) {
       const message = {
         _id: response.fileName,
@@ -111,9 +118,12 @@ const Chat = () => {
         createdAt: new Date(),
         user: senderUser,
         image: response.url,
-      }
-      const lastMessage = {...message, text: "Image"}
-      await Promise.all([addDoc(roomMessagesRef, message), updateDoc(roomRef, {lastMessage})])
+      };
+      const lastMessage = { ...message, text: "Image" };
+      await Promise.all([
+        addDoc(roomMessagesRef, message),
+        updateDoc(roomRef, { lastMessage }),
+      ]);
     }
   };
 
@@ -198,6 +208,32 @@ const Chat = () => {
             }}
           />
         )}
+        renderMessageImage={(props) => {
+          return (
+            <View style={styles.imageContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(true);
+                  setSelectedImageView(props.currentMessage.image);
+                }}
+              >
+                <Image
+                  source={{ uri: props.currentMessage.image }}
+                  style={styles.image}
+                  resizeMode="contain"
+                />
+                {selectedImageView ? (
+                  <ImageView
+                    imageIndex={0}
+                    images={[{ uri: props.currentMessage.image }]}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                  />
+                ) : null}
+              </TouchableOpacity>
+            </View>
+          );
+        }}
       />
     </ImageBackground>
   );
