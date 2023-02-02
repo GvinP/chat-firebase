@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "lightgrey",
     height: replyMessageBarHeight,
+    marginBottom: 3,
   },
   replyImage: {
     width: 20,

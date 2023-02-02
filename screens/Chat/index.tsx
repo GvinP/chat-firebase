@@ -22,6 +22,7 @@ import {
   Actions,
   InputToolbar,
   Bubble,
+  IMessage,
 } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
 import ImageView from "react-native-image-viewing";
@@ -32,9 +33,10 @@ const randomId = nanoid();
 
 const Chat = () => {
   const [roomHash, setRoomHash] = useState("");
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImageView, setSelectedImageView] = useState("");
+  const [replyMessage, setReplyMessage] = useState<IMessage | null>(null);
   const {
     theme: { colors },
   } = useContext(Context);
@@ -135,9 +137,12 @@ const Chat = () => {
     }
   };
 
-  const renderAccessory = () => (
-    <ReplyMessageBar message={{ text: "test text" }} clearReply={() => null} />
-  );
+  const renderAccessory = () =>
+    replyMessage && (
+      <ReplyMessageBar message={replyMessage} clearReply={clearReply} />
+    );
+
+  const clearReply = () => setReplyMessage(null);
 
   return (
     <ImageBackground
@@ -202,9 +207,11 @@ const Chat = () => {
               marginBottom: 2,
               borderRadius: 20,
               paddingTop: 5,
+              height: replyMessage ? 90 : 50,
             }}
           />
         )}
+        bottomOffset={replyMessage ? 0 : 50}
         renderBubble={(props) => (
           <Bubble
             {...props}
@@ -241,6 +248,7 @@ const Chat = () => {
             </View>
           );
         }}
+        onLongPress={(_, message) => setReplyMessage(message)}
       />
     </ImageBackground>
   );

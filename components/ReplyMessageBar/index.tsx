@@ -1,10 +1,11 @@
 import React from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
+import { IMessage } from "react-native-gifted-chat";
 import { styles } from "./styles";
 
 type ReplyMessageBarProps = {
   clearReply: () => void;
-  message: { text: string };
+  message: IMessage | null;
 };
 
 const ReplyMessageBar = ({ clearReply, message }: ReplyMessageBarProps) => {
@@ -17,7 +18,7 @@ const ReplyMessageBar = ({ clearReply, message }: ReplyMessageBarProps) => {
         />
       </View>
       <View style={styles.messageContainer}>
-        <Text>{message.text}</Text>
+        <Text>{message?.text || message?.image}</Text>
       </View>
       <TouchableOpacity style={styles.crossButton} onPress={clearReply}>
         <Image
