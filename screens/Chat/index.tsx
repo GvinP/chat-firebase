@@ -26,6 +26,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import ImageView from "react-native-image-viewing";
 import styles from "./styles";
+import ReplyMessageBar from "../../components/ReplyMessageBar";
 
 const randomId = nanoid();
 
@@ -134,6 +135,10 @@ const Chat = () => {
     }
   };
 
+  const renderAccessory = () => (
+    <ReplyMessageBar message={{ text: "test text" }} clearReply={() => null} />
+  );
+
   return (
     <ImageBackground
       source={require("../../assets/chatbg.png")}
@@ -148,6 +153,7 @@ const Chat = () => {
         })}
         user={senderUser}
         onSend={onSend}
+        renderAccessory={renderAccessory}
         renderActions={(props) => (
           <Actions
             {...props}
@@ -191,6 +197,7 @@ const Chat = () => {
           <InputToolbar
             {...props}
             containerStyle={{
+              flexDirection: "column-reverse",
               marginHorizontal: 10,
               marginBottom: 2,
               borderRadius: 20,
