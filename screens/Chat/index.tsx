@@ -23,11 +23,13 @@ import {
   InputToolbar,
   Bubble,
   IMessage,
+  MessageProps,
 } from "react-native-gifted-chat";
 import { Ionicons } from "@expo/vector-icons";
 import ImageView from "react-native-image-viewing";
 import styles from "./styles";
 import ReplyMessageBar from "../../components/ReplyMessageBar";
+import ChatMessage from "../../components/ChatMessage";
 
 const randomId = nanoid();
 
@@ -144,6 +146,10 @@ const Chat = () => {
 
   const clearReply = () => setReplyMessage(null);
 
+  const renderMessage = (props: MessageProps<IMessage>) => (
+    <ChatMessage {...props} />
+  );
+
   return (
     <ImageBackground
       source={require("../../assets/chatbg.png")}
@@ -212,16 +218,17 @@ const Chat = () => {
           />
         )}
         bottomOffset={replyMessage ? 0 : 50}
-        renderBubble={(props) => (
-          <Bubble
-            {...props}
-            textStyle={{ right: { color: colors.text } }}
-            wrapperStyle={{
-              left: { backgroundColor: colors.white },
-              right: { backgroundColor: colors.tertiary },
-            }}
-          />
-        )}
+        // renderBubble={(props) => (
+        //   <Bubble
+        //     {...props}
+        //     textStyle={{ right: { color: colors.text } }}
+        //     wrapperStyle={{
+        //       left: { backgroundColor: colors.white },
+        //       right: { backgroundColor: colors.tertiary },
+        //     }}
+        //   />
+        // )}
+        renderMessage={renderMessage}
         renderMessageImage={(props) => {
           return (
             <View style={styles.imageContainer}>
