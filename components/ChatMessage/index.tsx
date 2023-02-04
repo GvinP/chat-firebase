@@ -14,10 +14,12 @@ import {
 
 type ChatMessageProps = {
   setReplyOnSwipeOpen: (message: IMessage) => void;
+  updateRowRef: (ref: any) => void;
 } & MessageProps<IMessage>;
 
 const ChatMessage: React.FC<ChatMessageProps> = ({
   setReplyOnSwipeOpen,
+  updateRowRef,
   ...props
 }) => {
   const isNextMyMessage =
@@ -42,7 +44,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         style={[
           styles.container,
           { transform: [{ scale: size }, { translateX: trans }] },
-          { borderWidth: 1 },
           isNextMyMessage
             ? styles.defaultBottomOffset
             : styles.bottomOffsetNext,
@@ -66,6 +67,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
   return (
     <GestureHandlerRootView>
       <Swipeable
+        ref={updateRowRef}
         friction={2}
         rightThreshold={40}
         renderRightActions={renderRightActions}

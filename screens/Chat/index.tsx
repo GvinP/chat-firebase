@@ -1,6 +1,12 @@
 // @refresh reset
 import { Image, ImageBackground, TouchableOpacity, View } from "react-native";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { auth, db } from "../../firebase";
 import { useRoute } from "@react-navigation/native";
 import { RootRouteProps } from "../../navigation/types";
@@ -30,6 +36,7 @@ import ImageView from "react-native-image-viewing";
 import styles from "./styles";
 import ReplyMessageBar from "../../components/ReplyMessageBar";
 import ChatMessage from "../../components/ChatMessage";
+import { Swipeable } from "react-native-gesture-handler";
 
 const randomId = nanoid();
 
@@ -39,6 +46,7 @@ const Chat = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImageView, setSelectedImageView] = useState("");
   const [replyMessage, setReplyMessage] = useState<IMessage | null>(null);
+  const swipeableRowRef = useRef<Swipeable | null>(null);
   const {
     theme: { colors },
   } = useContext(Context);
@@ -96,6 +104,13 @@ const Chat = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (replyMessage && swipeableRowRef.current) {
+      swipeableRowRef.current.close();
+      swipeableRowRef.current = null;
+    }
+  }, [replyMessage]);
+
   const appendMessages = useCallback(
     (messages: any[]) => {
       setMessages((prevMessages) => GiftedChat.append(prevMessages, messages));
@@ -146,8 +161,25 @@ const Chat = () => {
 
   const clearReply = () => setReplyMessage(null);
 
+  const updateRowRef = useCallback(
+    (ref: any) => {
+      if (
+        ref &&
+        replyMessage &&
+        ref.props.children.props.currentMessage?._id === replyMessage._id
+      ) {
+        swipeableRowRef.current = ref;
+      }
+    },
+    [replyMessage]
+  );
+
   const renderMessage = (props: MessageProps<IMessage>) => (
-    <ChatMessage {...props} setReplyOnSwipeOpen={setReplyMessage} />
+    <ChatMessage
+      {...props}
+      setReplyOnSwipeOpen={setReplyMessage}
+      updateRowRef={updateRowRef}
+    />
   );
 
   return (

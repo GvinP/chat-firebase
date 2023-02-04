@@ -18,7 +18,7 @@ const ReplyMessageBar = ({ clearReply, message }: ReplyMessageBarProps) => {
         />
       </View>
       <View style={styles.messageContainer}>
-        <Text>{message?.text || message?.image}</Text>
+        <Text>{message?.text || (message?.image && "photo")}</Text>
       </View>
       <TouchableOpacity style={styles.crossButton} onPress={clearReply}>
         <Image
