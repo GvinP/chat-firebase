@@ -147,7 +147,7 @@ const Chat = () => {
   const clearReply = () => setReplyMessage(null);
 
   const renderMessage = (props: MessageProps<IMessage>) => (
-    <ChatMessage {...props} />
+    <ChatMessage {...props} setReplyOnSwipeOpen={setReplyMessage} />
   );
 
   return (
